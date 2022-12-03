@@ -1,15 +1,32 @@
 const express = require('express');
 const cors = require('cors');
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const environments = require('./utils/environments');
 
-app.get('/', (req, res) => {
-  res.send('OK');
+const { PORT, MONGO_ATLAS_URI } = environments;
+
+const mongoose = require('mongoose');
+
+mongoose.connect(MONGO_ATLAS_URI, {
+  autoIndex: true,
+  autoCreate: true,
 });
 
-app.listen(8888, () => console.log('Server is running on port 8888'));
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log('MongoDB database connected successfully!');
+  main();
+});
 
-module.exports = app;
+const main = () => {
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  app.get('/', (req, res) => {
+    res.send('OK');
+  });
+
+  app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+};
