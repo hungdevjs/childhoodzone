@@ -1,7 +1,7 @@
-import Home from './pages/Home';
+import Navigation from "./navigations";
 
 const App = () => {
-  return <Home />;
+  return <Navigation />;
 };
 
 export default App;

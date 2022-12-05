@@ -17,7 +17,7 @@ const MainRoutes = () => {
       <Route path="/comingsoon" element={<ComingSoonRoute />} />
       <Route path="/friends/*" element={<FriendsRoute />} />
       <Route path="/parties/*" element={<PartiesRoute />} />
-      <Route path="/media" element={<MediaRoute />} />
+      <Route path="/media/*" element={<MediaRoute />} />
       <Route path="/setting" element={<SettingRoute />} />
       <Route path="*" element={<HomeRoute />} />
     </Routes>

@@ -1,5 +1,7 @@
+import Layout from "../../components/Layout";
+
 const Media = () => {
-  return <div>Media</div>;
+  return <Layout>Media</Layout>;
 };
 
 export default Media;
