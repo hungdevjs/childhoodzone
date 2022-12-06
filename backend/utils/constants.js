@@ -1,10 +1,10 @@
 export const MediaTypes = {
-  Comic: 'Comic',
-  Movie: 'Movie',
+  Comic: "Comic",
+  Movie: "Movie",
 };
 
 export const UserRoles = {
-  Admin: 'Admin',
-  User: 'User',
-  PremiumUser: 'PremiumUser',
+  Admin: "Admin",
+  User: "User",
+  PremiumUser: "PremiumUser",
 };
