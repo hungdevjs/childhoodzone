@@ -8,5 +8,3 @@ export const UserRoles = {
   User: "User",
   PremiumUser: "PremiumUser",
 };
-
-export const randomString = "someRandomString";
