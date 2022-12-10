@@ -3,7 +3,7 @@ const environments = require("../utils/environments");
 
 const { JWT_SECRET_KEY } = environments;
 
-const login = (req, res, next) => {
+const checkToken = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
 
   if (!token) return res.status(404).send("No token");
@@ -19,4 +19,4 @@ const login = (req, res, next) => {
   });
 };
 
-module.exports = { login };
+module.exports = { checkToken };

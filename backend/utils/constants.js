@@ -1,10 +1,12 @@
-export const MediaTypes = {
+const MediaTypes = {
   Comic: "Comic",
   Movie: "Movie",
 };
 
-export const UserRoles = {
+const UserRoles = {
   Admin: "Admin",
   User: "User",
   PremiumUser: "PremiumUser",
 };
+
+module.exports = { MediaTypes, UserRoles };
