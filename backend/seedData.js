@@ -11,13 +11,15 @@ mongoose.connect(MONGO_ATLAS_URI, {
 });
 
 const connection = mongoose.connection;
-connection.once("open", () => {
+connection.once("open", async () => {
   console.log("MongoDB connected successfully");
 
-  generateData();
+  await generateData();
+
+  console.log("Added data to MongoDB");
 });
 
-const generateData = () => {
+const generateData = async () => {
   const User = require("./models/user.model");
   const Media = require("./models/media.model");
 

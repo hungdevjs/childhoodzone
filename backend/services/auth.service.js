@@ -6,8 +6,6 @@ const User = require("../models/user.model");
 const { JWT_SECRET_KEY } = require("../utils/environments");
 
 const login = async (username, password) => {
-  console.log(JWT_SECRET_KEY);
-
   const userExist = await User.findOne({ username });
   if (!userExist) throw new Error("Unauthorized");
 
