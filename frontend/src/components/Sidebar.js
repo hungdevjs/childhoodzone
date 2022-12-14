@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { indigo, grey } from '@mui/material/colors';
 import HomeIcon from '@mui/icons-material/Home';
@@ -20,6 +21,8 @@ const navigations = [
 ];
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       width="20vw"
@@ -70,6 +73,7 @@ const Sidebar = () => {
                     },
                   },
                 }}
+                onClick={() => navigate(child.path)}
               >
                 <Box
                   display="flex"
