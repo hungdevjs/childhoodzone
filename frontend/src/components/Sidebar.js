@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { indigo, grey } from '@mui/material/colors';
 import HomeIcon from '@mui/icons-material/Home';
@@ -22,6 +22,10 @@ const navigations = [
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const isActive = (path) =>
+    pathname === path || (path !== '/' && pathname.includes(path));
 
   return (
     <Box
@@ -65,9 +69,6 @@ const Sidebar = () => {
                     '& .nav': {
                       opacity: 1,
                     },
-                    '& .active': {
-                      opacity: 1,
-                    },
                     '& p': {
                       fontWeight: 600,
                     },
@@ -80,16 +81,20 @@ const Sidebar = () => {
                   gap={2}
                   alignItems="center"
                   className="nav"
-                  sx={{ opacity: 0.6 }}
+                  sx={{ opacity: isActive(child.path) ? 1 : 0.6 }}
                 >
                   <child.icon sx={{ fontSize: 24, color: grey[600] }} />
-                  <Typography fontSize={14}>{child.name}</Typography>
+                  <Typography
+                    fontSize={14}
+                    fontWeight={isActive(child.path) ? 600 : 400}
+                  >
+                    {child.name}
+                  </Typography>
                 </Box>
                 <Box
-                  className="active"
                   width={4}
                   bgcolor={indigo[600]}
-                  sx={{ opacity: 0 }}
+                  sx={{ opacity: isActive(child.path) ? 1 : 0 }}
                 />
               </Box>
             ))}
