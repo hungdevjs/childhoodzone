@@ -1,10 +1,14 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { indigo, grey } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import HomeIcon from '@mui/icons-material/Home';
 import MovieIcon from '@mui/icons-material/Movie';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+import AudioFileIcon from '@mui/icons-material/AudioFile';
+import PersonIcon from '@mui/icons-material/Person';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import Images from '../assets/Images';
 
@@ -15,7 +19,20 @@ const navigations = [
       { name: 'Home', path: '/', icon: HomeIcon },
       { name: 'Movies', path: '/movies', icon: MovieIcon },
       { name: 'Comics', path: '/comics', icon: LibraryBooksIcon },
+      { name: 'Audios', path: '/audios', icon: AudioFileIcon },
       { name: 'Games', path: '/games', icon: VideogameAssetIcon },
+    ],
+  },
+  {
+    name: 'General',
+    children: [
+      { name: 'Profile', path: '/profile', icon: PersonIcon },
+      {
+        name: 'Admin panel',
+        path: '/admin/users',
+        icon: AdminPanelSettingsIcon,
+      },
+      { name: 'Log out', path: '/logout', icon: LogoutIcon },
     ],
   },
 ];
@@ -38,11 +55,15 @@ const Sidebar = () => {
     >
       <Box p={3} display="flex" alignItems="center" gap={2}>
         <img src={Images.logo} alt="logo" width={50} />
-        <Typography fontSize={24} fontFamily="'Nerko One', cursive">
+        <Typography
+          fontSize={24}
+          fontFamily="'Nerko One', cursive"
+          color="error.main"
+        >
           ChildhoodZone
         </Typography>
       </Box>
-      <Box display="flex" flexDirection="column" gap={2} pl={3}>
+      <Box display="flex" flexDirection="column" gap={4} pl={3}>
         {navigations.map((navigation) => (
           <Box
             key={navigation.name}
@@ -54,6 +75,7 @@ const Sidebar = () => {
               fontSize={14}
               fontWeight={600}
               textTransform="uppercase"
+              color={grey[400]}
             >
               {navigation.name}
             </Typography>
@@ -83,17 +105,23 @@ const Sidebar = () => {
                   className="nav"
                   sx={{ opacity: isActive(child.path) ? 1 : 0.6 }}
                 >
-                  <child.icon sx={{ fontSize: 24, color: grey[600] }} />
+                  <child.icon
+                    sx={{
+                      fontSize: 24,
+                      color: isActive(child.path) ? 'error.main' : grey[600],
+                    }}
+                  />
                   <Typography
                     fontSize={14}
                     fontWeight={isActive(child.path) ? 600 : 400}
+                    color={isActive(child.path) ? 'error.main' : 'black'}
                   >
                     {child.name}
                   </Typography>
                 </Box>
                 <Box
                   width={4}
-                  bgcolor={indigo[600]}
+                  bgcolor="error.main"
                   sx={{ opacity: isActive(child.path) ? 1 : 0 }}
                 />
               </Box>
