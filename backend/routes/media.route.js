@@ -1,24 +1,25 @@
-const express = require("express");
+const express = require('express');
 
-const authMiddleware = require("../middlewares/auth.middleware");
-const mediaController = require("../controllers/media.controller");
+const auth = require('../middlewares/auth.middleware');
+const mediaController = require('../controllers/media.controller');
+const { UserRoles } = require('../utils/constants');
 
 const mediaRoute = express.Router();
 
-mediaRoute.get("/media", authMiddleware.checkToken, mediaController.getMedia);
-mediaRoute.post(
-  "/media",
-  authMiddleware.checkToken,
-  mediaController.createMedia
+mediaRoute.get(
+  '/media',
+  auth([UserRoles.Admin, UserRoles.PremiumUser, UserRoles.User]),
+  mediaController.getMedia
 );
+mediaRoute.post('/media', auth([UserRoles.Admin]), mediaController.createMedia);
 mediaRoute.put(
-  "/media/:id",
-  authMiddleware.checkToken,
+  '/media/:id',
+  auth([UserRoles.Admin]),
   mediaController.updateMedia
 );
 mediaRoute.delete(
-  "/media/:id",
-  authMiddleware.checkToken,
+  '/media/:id',
+  auth([UserRoles.Admin]),
   mediaController.deleteMedia
 );
 

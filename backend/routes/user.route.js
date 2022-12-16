@@ -1,20 +1,17 @@
-const express = require("express");
+const express = require('express');
 
-const authMiddleware = require("../middlewares/auth.middleware");
-const userController = require("../controllers/user.controller");
+const auth = require('../middlewares/auth.middleware');
+const userController = require('../controllers/user.controller');
+const { UserRoles } = require('../utils/constants');
 
 const userRoute = express.Router();
 
-userRoute.get("/users", authMiddleware.checkToken, userController.getUsers);
-userRoute.post("/users", authMiddleware.checkToken, userController.createUser);
-userRoute.put(
-  "/users/:id",
-  authMiddleware.checkToken,
-  userController.updateUser
-);
+userRoute.get('/users', auth([UserRoles.Admin]), userController.getUsers);
+userRoute.post('/users', auth([UserRoles.Admin]), userController.createUser);
+userRoute.put('/users/:id', auth([UserRoles.Admin]), userController.updateUser);
 userRoute.delete(
-  "/users/:id",
-  authMiddleware.checkToken,
+  '/users/:id',
+  auth([UserRoles.Admin]),
   userController.deleteUser
 );
 

@@ -1,10 +1,6 @@
-const service = require("../services/media.service");
+const service = require('../services/media.service');
 
 const getMedia = async (req, res) => {
-  const { user } = req;
-  if (user.role !== "Admin")
-    return res.status(401).send("You don't have permission to do this");
-
   try {
     const media = await service.getMedia();
 
@@ -15,10 +11,6 @@ const getMedia = async (req, res) => {
 };
 
 const createMedia = async (req, res) => {
-  const { user } = req;
-  if (user.role !== "Admin")
-    return res.status(401).send("You don't have permission to do this");
-
   try {
     const { name, description, url, type, images, viewed, isPremium } =
       req.body;
@@ -40,10 +32,6 @@ const createMedia = async (req, res) => {
 };
 
 const updateMedia = async (req, res) => {
-  const { user } = req;
-  if (user.role !== "Admin")
-    return res.status(401).send("You don't have permission to do this");
-
   try {
     const mediaId = req.params.id;
     const { name, description, url, type, images, viewed, isPremium } =
@@ -59,25 +47,21 @@ const updateMedia = async (req, res) => {
       isPremium,
     });
 
-    res.status(200).send("Updated media successfully");
+    res.status(200).send('Updated media successfully');
   } catch (err) {
-    err.message === "Media not found"
+    err.message === 'Media not found'
       ? res.status(404).send(err.message)
       : res.status(400).send(err.message);
   }
 };
 
 const deleteMedia = async (req, res) => {
-  const { user } = req;
-  if (user.role !== "Admin")
-    return res.status(401).send("You don't have permission to do this");
-
   try {
     const mediaId = req.params.id;
 
     await service.deleteMedia(mediaId);
 
-    res.status(200).send("Deleted media successfully");
+    res.status(200).send('Deleted media successfully');
   } catch (err) {
     res.sendStatus(404);
   }
