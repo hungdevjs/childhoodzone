@@ -12,7 +12,7 @@ const login = async (username, password) => {
   const isPassed = passwordHash.verify(password, user.password);
   if (!isPassed) throw new Error('Invalid password');
 
-  const { _id, username, role } = user;
+  const { _id, role } = user;
 
   return jsonwebtoken.sign({ _id, username, role }, JWT_SECRET_KEY, {
     expiresIn: '2d',

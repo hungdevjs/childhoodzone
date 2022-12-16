@@ -1,4 +1,4 @@
-const service = require("../services/auth.service");
+const service = require('../services/auth.service');
 
 const login = async (req, res) => {
   try {
@@ -18,7 +18,7 @@ const register = async (req, res) => {
 
     await service.register(username, password, confirmedPassword);
 
-    res.status(201).send("Registered successfully");
+    res.status(201).send('Registered successfully');
   } catch (err) {
     res.status(400).send(err.message);
   }
