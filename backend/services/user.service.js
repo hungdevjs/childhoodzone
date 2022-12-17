@@ -1,30 +1,35 @@
-const passwordHash = require("password-hash");
+const passwordHash = require('password-hash');
 
-const User = require("../models/user.model");
-const { UserRoles } = require("../utils/constants");
+const User = require('../models/user.model');
+const { UserRoles } = require('../utils/constants');
 
 const getUsers = async () => {
-  const users = await User.find({}).select("-password").lean();
+  const users = await User.find({}).select('-password').lean();
 
   return users || [];
+};
+
+const getById = async (_id) => {
+  const user = await User.findOne({ _id }).select('-password').lean();
+  return user;
 };
 
 const createUser = async (userInfor) => {
   const { username, password, role } = userInfor;
 
-  if (!username.trim() || username.includes(" "))
+  if (!username.trim() || username.includes(' '))
     throw new Error("Username musn't be empty or blank");
 
-  if (!password.trim() || password.includes(" "))
+  if (!password.trim() || password.includes(' '))
     throw new Error("Password musn't be empty or blank");
 
   if (username.length < 8 || password.length < 8)
-    throw new Error("Username and password must have at least 8 characters");
+    throw new Error('Username and password must have at least 8 characters');
 
-  if (!Object.values(UserRoles).includes(role)) throw new Error("Invalid role");
+  if (!Object.values(UserRoles).includes(role)) throw new Error('Invalid role');
 
   const existUser = await User.findOne({ username }).lean();
-  if (existUser) throw new Error("User existed");
+  if (existUser) throw new Error('User existed');
 
   const newUser = new User({
     username,
@@ -37,41 +42,34 @@ const createUser = async (userInfor) => {
   await newUser.save();
 };
 
-const updateUser = async (userInfor) => {
-  const { userId, username, password, role } = userInfor;
+const updateUser = async (_id, data) => {
+  const { username, role } = data;
 
-  const user = await User.findOne({ _id: userId });
-  if (!user) throw new Error("User not found");
+  const user = await User.findOne({ _id });
+  if (!user) throw new Error('User not found');
 
   const userExist = await User.findOne({ username }).lean();
-  if (userExist && userExist.username !== user.username)
-    throw new Error("Username already exists");
+  if (userExist && userExist._id.toString() !== user._id.toString())
+    throw new Error('Username already exists');
 
-  if (!username.trim() || username.includes(" "))
+  if (!username.trim() || username.includes(' '))
     throw new Error("Username musn't be empty or blank");
 
-  if (!password.trim() || password.includes(" "))
-    throw new Error("Password musn't be empty or blank");
+  if (username.length < 8)
+    throw new Error('Username and password must have at least 8 characters');
 
-  if (username.length < 8 || password.length < 8)
-    throw new Error("Username and password must have at least 8 characters");
+  if (!Object.values(UserRoles).includes(role)) throw new Error('Invalid role');
 
-  if (!Object.values(UserRoles).includes(role)) throw new Error("Invalid role");
+  user.username = username;
+  user.role = role;
 
-  const newUser = {
-    username,
-    password: passwordHash.generate(password),
-    role,
-  };
-
-  await user.updateOne(newUser);
   await user.save();
 };
 
 const deleteUser = async (userId) => {
   const user = await User.findOne({ _id: userId });
 
-  if (!user) throw new Error("User not found");
+  if (!user) throw new Error('User not found');
 
   await user.remove();
 };
@@ -96,13 +94,13 @@ const getUserFavourites = async (userId) => {
 
 const createUserFavourite = async (userId, mediaId) => {
   const mediaExist = await Media.findOne({ _id: mediaId }).lean();
-  if (!mediaExist) throw new Error("Media not found");
+  if (!mediaExist) throw new Error('Media not found');
 
   const user = await User.findOne({ _id: userId });
   const userFavourites = user.liked;
 
   if (userFavourites.find((media) => media.mediaId === mediaId))
-    throw new Error("Media existed");
+    throw new Error('Media existed');
 
   user.liked = [...user.liked, { mediaId }];
 
@@ -111,6 +109,7 @@ const createUserFavourite = async (userId, mediaId) => {
 
 module.exports = {
   getUsers,
+  getById,
   createUser,
   updateUser,
   deleteUser,

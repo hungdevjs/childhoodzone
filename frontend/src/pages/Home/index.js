@@ -50,7 +50,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <Box display="flex" flexDirection="column" gap={2}>
+      <Box display="flex" flexDirection="column" gap={2} p={2}>
         <Box display="flex" alignItems="center" gap={2}>
           {mediaTypes.map((type, index) => (
             <Typography

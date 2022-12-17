@@ -10,6 +10,17 @@ const getUsers = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await service.getById(id);
+
+    res.status(200).send(user);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+};
+
 const createUser = async (req, res) => {
   try {
     const { username, password, role } = req.body;
@@ -25,9 +36,9 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const { username, password, role } = req.body;
+    const { username, role } = req.body;
 
-    await service.updateUser({ userId, username, password, role });
+    await service.updateUser(userId, { username, role });
 
     res.status(200).send('Updated successfully');
   } catch (err) {
@@ -82,7 +93,7 @@ const createUserFavourite = async (req, res) => {
 
     res.sendStatus(201);
   } catch (err) {
-    err.message === "Media not found"
+    err.message === 'Media not found'
       ? res.status(404).send(err.message)
       : res.status(400).send(err.message);
   }
@@ -90,6 +101,7 @@ const createUserFavourite = async (req, res) => {
 
 module.exports = {
   getUsers,
+  getUserById,
   createUser,
   updateUser,
   deleteUser,

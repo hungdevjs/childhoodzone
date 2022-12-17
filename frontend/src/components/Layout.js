@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
   return (
     <Box height="100vh" display="flex">
       <Sidebar />
-      <Box p={3} flex={1} overflow="auto">
+      <Box flex={1} display="flex" flexDirection="column" overflow="auto">
         {children}
       </Box>
     </Box>

@@ -12,13 +12,13 @@ import {
   Paper,
   Typography,
   Button,
+  Dialog,
 } from '@mui/material';
 import moment from 'moment';
 
 import useAppContext from '../../hooks/useAppContext';
-import { get } from '../../services/user.service';
+import { get, remove } from '../../services/user.service';
 import Layout from '../../components/Layout';
-import { grey } from '@mui/material/colors';
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -26,6 +26,7 @@ const UserList = () => {
   const {
     loadingState: { setIsLoading },
   } = useAppContext();
+  const [removingUser, setRemovingUser] = useState(null);
   const [users, setUsers] = useState([]);
 
   const getData = async () => {
@@ -41,13 +42,57 @@ const UserList = () => {
     setIsLoading(false);
   };
 
+  const removeUser = async (id) => {
+    setIsLoading(true);
+
+    try {
+      await remove(id);
+      await getData();
+    } catch (err) {
+      enqueueSnackbar(err.message, { variant: 'error' });
+    }
+
+    setRemovingUser(null);
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
 
   return (
     <Layout>
-      <Box display="flex" flexDirection="column" gap={2}>
+      <Dialog open={!!removingUser} onClose={() => setRemovingUser(null)}>
+        <Box p={2} display="flex" flexDirection="column" gap={2}>
+          <Typography>
+            Do you want to remove user {removingUser?.username}?
+          </Typography>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            gap={1}
+          >
+            <Button
+              size="small"
+              variant="contained"
+              color="error"
+              onClick={() => removeUser(removingUser._id)}
+            >
+              <Typography fontSize={10}>Remove</Typography>
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
+              color="secondary"
+              onClick={() => setRemovingUser(null)}
+            >
+              <Typography fontSize={10}>Cancel</Typography>
+            </Button>
+          </Box>
+        </Box>
+      </Dialog>
+      <Box display="flex" flexDirection="column" gap={2} p={2}>
         <Typography variant="h5">User list</Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -102,7 +147,12 @@ const UserList = () => {
                         >
                           <Typography fontSize={10}>Edit</Typography>
                         </Button>
-                        <Button size="small" variant="contained" color="error">
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="error"
+                          onClick={() => setRemovingUser(user)}
+                        >
                           <Typography fontSize={10}>Remove</Typography>
                         </Button>
                       </Box>
