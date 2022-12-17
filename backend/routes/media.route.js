@@ -1,24 +1,34 @@
-const express = require('express');
+const express = require("express");
 
-const auth = require('../middlewares/auth.middleware');
-const mediaController = require('../controllers/media.controller');
-const { UserRoles } = require('../utils/constants');
+const auth = require("../middlewares/auth.middleware");
+const mediaController = require("../controllers/media.controller");
+const { UserRoles } = require("../utils/constants");
 
 const mediaRoute = express.Router();
 
+mediaRoute.get("/medias", auth([UserRoles.Admin]), mediaController.getMedias);
 mediaRoute.get(
-  '/media',
-  auth([UserRoles.Admin, UserRoles.PremiumUser, UserRoles.User]),
-  mediaController.getMedia
+  "/medias/popular",
+  auth([UserRoles.Admin]),
+  mediaController.getPopularMedias
 );
-mediaRoute.post('/media', auth([UserRoles.Admin]), mediaController.createMedia);
+mediaRoute.get(
+  "/medias/:id",
+  auth([UserRoles.Admin]),
+  mediaController.getMediaById
+);
+mediaRoute.post(
+  "/medias",
+  auth([UserRoles.Admin]),
+  mediaController.createMedia
+);
 mediaRoute.put(
-  '/media/:id',
+  "/medias/:id",
   auth([UserRoles.Admin]),
   mediaController.updateMedia
 );
 mediaRoute.delete(
-  '/media/:id',
+  "/medias/:id",
   auth([UserRoles.Admin]),
   mediaController.deleteMedia
 );

@@ -49,9 +49,51 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getUserHistory = async (req, res) => {
+  const { _id } = req.user;
+
+  try {
+    const history = await service.getUserHistory(_id.toString());
+
+    res.status(200).send(history);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+};
+
+const getUserFavourites = async (req, res) => {
+  const { userId } = req;
+
+  try {
+    const userFavourites = await service.getUserFavourites(userId);
+
+    res.status(200).send(userFavourites);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+};
+
+const createUserFavourite = async (req, res) => {
+  const { userId } = req;
+  const { mediaId } = req.body;
+
+  try {
+    await service.createUserFavourite(userId, mediaId);
+
+    res.sendStatus(201);
+  } catch (err) {
+    err.message === "Media not found"
+      ? res.status(404).send(err.message)
+      : res.status(400).send(err.message);
+  }
+};
+
 module.exports = {
   getUsers,
   createUser,
   updateUser,
   deleteUser,
+  getUserHistory,
+  getUserFavourites,
+  createUserFavourite,
 };

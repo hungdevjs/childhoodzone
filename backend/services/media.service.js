@@ -2,8 +2,17 @@ const Media = require("../models/media.model");
 
 const { MediaTypes } = require("../utils/constants");
 
-const getMedia = async () => {
-  const media = await Media.find({});
+const getMedias = async () => {
+  const media = await Media.find({}).lean();
+
+  return media;
+};
+
+const getMediaById = async (mediaId) => {
+  const media = await Media.findOne({ _id: mediaId });
+  media.viewed += 1;
+
+  await media.save();
 
   return media;
 };
@@ -12,7 +21,7 @@ const createMedia = async (mediaInfor) => {
   const { name, description, url, type, images, viewed, isPremium } =
     mediaInfor;
 
-  const mediaExist = await Media.findOne({ name });
+  const mediaExist = await Media.findOne({ name }).lean();
 
   if (mediaExist) throw new Error("Media already exists");
 
@@ -74,9 +83,42 @@ const deleteMedia = async (mediaId) => {
   await media.remove();
 };
 
+const getPopularMedias = async () => {
+  const bestMovie = await Media.find({ type: "Movie" })
+    .sort({ viewed: -1 })
+    .limit(1);
+  const topViewMovies = await Media.find({ type: "Movie" })
+    .sort({ viewed: -1 })
+    .limit(4);
+  const topRatingMovies = [];
+
+  const bestComic = await Media.find({ type: "Comic" })
+    .sort({ viewed: -1 })
+    .limit(1);
+  const topViewComics = await Media.find({ type: "Comic" })
+    .sort({ viewed: -1 })
+    .limit(4);
+  const topRatingComics = [];
+
+  return {
+    movies: {
+      ...bestMovie,
+      topViews: topViewMovies,
+      topRatings: topRatingMovies,
+    },
+    comics: {
+      ...bestComic,
+      topViews: topViewComics,
+      topRatings: topRatingComics,
+    },
+  };
+};
+
 module.exports = {
-  getMedia,
+  getMedias,
+  getMediaById,
   createMedia,
   updateMedia,
   deleteMedia,
+  getPopularMedias,
 };
