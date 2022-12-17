@@ -90,7 +90,9 @@ const getPopularMedias = async () => {
   const topViewMovies = await Media.find({ type: 'Movie' })
     .sort({ viewed: -1 })
     .limit(4);
-  const topRatingMovies = [];
+  const topRatingMovies = await Media.find({ type: 'Movie' })
+    .sort({ rating: -1 })
+    .limit(4);
 
   const bestComic = await Media.find({ type: 'Comic' })
     .sort({ viewed: -1 })
@@ -98,7 +100,9 @@ const getPopularMedias = async () => {
   const topViewComics = await Media.find({ type: 'Comic' })
     .sort({ viewed: -1 })
     .limit(4);
-  const topRatingComics = [];
+  const topRatingComics = await Media.find({ type: 'Comic' })
+    .sort({ rating: -1 })
+    .limit(4);
 
   return {
     movies: {
