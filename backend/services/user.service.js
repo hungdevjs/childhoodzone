@@ -1,6 +1,7 @@
 const passwordHash = require('password-hash');
 
 const User = require('../models/user.model');
+const Media = require('../models/media.model');
 const { UserRoles } = require('../utils/constants');
 
 const getUsers = async () => {
