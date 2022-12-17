@@ -31,27 +31,17 @@ connection.once("open", async () => {
 const generateMediaData = async () => {
   Object.keys(worksheets).map((item, index) => {
     worksheets[item].map(async (media) => {
-      if (media.Episode) {
-        const newMedia = new Media({
-          name: `${item} episode ${media.Episode}`,
-          description: media.Name || `${item}`,
-          url: media.Link,
-          type: "Movie",
-          images: [],
-        });
+      const newMedia = await new Media({
+        name: `${item}`,
+        episode: media.Episode || media.Volume,
+        description:
+          media.Name || `${item} episode ${media.Episode || media.Volume}`,
+        url: media.Link,
+        type: media.Episode ? "Movie" : "Comic",
+        images: [],
+      });
 
-        await newMedia.save();
-      } else {
-        const newMedia = new Media({
-          name: `${item} volume ${media.Volume}`,
-          description: media.Name || `${item}`,
-          url: media.Link,
-          type: "Comic",
-          images: [],
-        });
-
-        await newMedia.save();
-      }
+      await newMedia.save();
     });
   });
 };
