@@ -1,9 +1,9 @@
-const Media = require("../models/media.model");
+const Media = require('../models/media.model');
 
-const { MediaTypes } = require("../utils/constants");
+const { MediaTypes } = require('../utils/constants');
 
 const getMedias = async () => {
-  const media = await Media.find({}).lean();
+  const media = await Media.find({}).sort({ name: 1, episode: 1 }).lean();
 
   return media;
 };
@@ -23,16 +23,16 @@ const createMedia = async (mediaInfor) => {
 
   const mediaExist = await Media.findOne({ name }).lean();
 
-  if (mediaExist) throw new Error("Media already exists");
+  if (mediaExist) throw new Error('Media already exists');
 
-  if (!name.trim()) throw new Error("Media name cannot be empty");
+  if (!name.trim()) throw new Error('Media name cannot be empty');
 
-  if (!description.trim()) throw new Error("Media description cannot be empty");
+  if (!description.trim()) throw new Error('Media description cannot be empty');
 
-  if (!url.trim()) throw new Error("Media url cannot be empty");
+  if (!url.trim()) throw new Error('Media url cannot be empty');
 
   if (!Object.values(MediaTypes).includes(type))
-    throw new Error("Invalid media type");
+    throw new Error('Invalid media type');
 
   const media = new Media({
     name,
@@ -52,14 +52,14 @@ const updateMedia = async (mediaId, mediaInfor) => {
     mediaInfor;
 
   const media = await Media.findOne({ _id: mediaId });
-  if (!media) throw new Error("Media not found");
+  if (!media) throw new Error('Media not found');
 
   const mediaExist = await Media.findOne({ name }).lean();
   if (mediaExist && mediaExist._id.toString() !== mediaId)
-    throw new Error("Media name already exists");
+    throw new Error('Media name already exists');
 
   if (!Object.values(MediaTypes).includes(type))
-    throw new Error("Invalid media type");
+    throw new Error('Invalid media type');
 
   const newMedia = {
     name,
@@ -78,36 +78,36 @@ const updateMedia = async (mediaId, mediaInfor) => {
 const deleteMedia = async (mediaId) => {
   const media = await Media.findOne({ _id: mediaId });
 
-  if (!media) throw new Error("Media not found");
+  if (!media) throw new Error('Media not found');
 
   await media.remove();
 };
 
 const getPopularMedias = async () => {
-  const bestMovie = await Media.find({ type: "Movie" })
+  const bestMovie = await Media.find({ type: 'Movie' })
     .sort({ viewed: -1 })
     .limit(1);
-  const topViewMovies = await Media.find({ type: "Movie" })
+  const topViewMovies = await Media.find({ type: 'Movie' })
     .sort({ viewed: -1 })
     .limit(4);
   const topRatingMovies = [];
 
-  const bestComic = await Media.find({ type: "Comic" })
+  const bestComic = await Media.find({ type: 'Comic' })
     .sort({ viewed: -1 })
     .limit(1);
-  const topViewComics = await Media.find({ type: "Comic" })
+  const topViewComics = await Media.find({ type: 'Comic' })
     .sort({ viewed: -1 })
     .limit(4);
   const topRatingComics = [];
 
   return {
     movies: {
-      ...bestMovie,
+      best: bestMovie[0],
       topViews: topViewMovies,
       topRatings: topRatingMovies,
     },
     comics: {
-      ...bestComic,
+      best: bestComic[0],
       topViews: topViewComics,
       topRatings: topRatingComics,
     },

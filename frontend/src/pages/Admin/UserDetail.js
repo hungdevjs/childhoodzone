@@ -15,6 +15,7 @@ import { grey } from '@mui/material/colors';
 import { useSnackbar } from 'notistack';
 
 import Layout from '../../components/Layout';
+import Navs from './components/Navs';
 import useAppContext from '../../hooks/useAppContext';
 import { getById, update } from '../../services/user.service';
 
@@ -71,72 +72,78 @@ const UserDetail = () => {
 
   return (
     <Layout>
-      <Box
-        flex={1}
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
-      >
-        <Grid container>
-          <Grid item xs={12} md={6}>
-            <Box p={2} display="flex" flexDirection="column" gap={2}>
-              <Typography variant="h4">{_id}</Typography>
-              <TextField
-                key={_id}
-                fullWidth
-                variant="outlined"
-                label="Username"
-                placeholder="Username"
-                value={username}
-                onChange={(e) =>
-                  updateUserField('username', e.target.value.trim())
-                }
-              />
-              <FormControl fullWidth>
-                <InputLabel id="user-role">Role</InputLabel>
-                <Select
-                  key={_id}
-                  labelId="user-role"
-                  value={role}
-                  label="Role"
-                  onChange={(e) => updateUserField('role', e.target.value)}
-                >
-                  {userRoles.map((role) => (
-                    <MenuItem key={role} value={role}>
-                      {role}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </Grid>
-        </Grid>
+      <Box flex={1} display="flex" flexDirection="column">
+        <Box p={2} pb={0}>
+          <Navs />
+        </Box>
         <Box
-          display="flex"
-          gap={1}
           p={2}
-          sx={{ borderTop: `1px solid ${grey[200]}` }}
+          flex={1}
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
         >
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={updateUser}
+          <Grid container>
+            <Grid item xs={12} md={6}>
+              <Box display="flex" flexDirection="column" gap={2}>
+                <Typography variant="h4">{_id}</Typography>
+                <TextField
+                  key={_id}
+                  fullWidth
+                  variant="outlined"
+                  label="Username"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) =>
+                    updateUserField('username', e.target.value.trim())
+                  }
+                />
+                <FormControl fullWidth>
+                  <InputLabel id="user-role">Role</InputLabel>
+                  <Select
+                    key={_id}
+                    labelId="user-role"
+                    value={role}
+                    label="Role"
+                    onChange={(e) => updateUserField('role', e.target.value)}
+                  >
+                    {userRoles.map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Grid>
+          </Grid>
+          <Box
+            display="flex"
+            gap={1}
+            p={2}
+            sx={{ borderTop: `1px solid ${grey[200]}` }}
           >
-            <Typography fontSize={12} fontWeight={600}>
-              Update
-            </Typography>
-          </Button>
-          <Button
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate('/admin/users')}
-          >
-            <Typography fontSize={12} fontWeight={600}>
-              Cancel
-            </Typography>
-          </Button>
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={updateUser}
+            >
+              <Typography fontSize={12} fontWeight={600}>
+                Update
+              </Typography>
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
+              color="secondary"
+              onClick={() => navigate('/admin/users')}
+            >
+              <Typography fontSize={12} fontWeight={600}>
+                Cancel
+              </Typography>
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Layout>

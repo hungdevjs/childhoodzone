@@ -19,6 +19,7 @@ import moment from 'moment';
 import useAppContext from '../../hooks/useAppContext';
 import { get, remove } from '../../services/user.service';
 import Layout from '../../components/Layout';
+import Navs from './components/Navs';
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -93,6 +94,7 @@ const UserList = () => {
         </Box>
       </Dialog>
       <Box display="flex" flexDirection="column" gap={2} p={2}>
+        <Navs />
         <Typography variant="h5">User list</Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
