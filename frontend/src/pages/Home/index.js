@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { useSnackbar } from 'notistack';
 
 import Layout from '../../components/Layout';
 import TopMedias from './components/TopMedias';
+import { getTopMedias } from '../../services/media.service';
+import useAppContext from '../../hooks/useAppContext';
 
 const mediaTypes = ['Movies', 'Comics', 'Audios'];
 
@@ -31,18 +34,33 @@ const mockData = {
 };
 
 const Home = () => {
+  const {
+    loadingState: { setIsLoading },
+  } = useAppContext();
+  const { enqueueSnackbar } = useSnackbar();
   const [tab, setTab] = useState(0);
   const [allTopMedias, setAllTopMedias] = useState({
-    movies: mockData,
-    comics: mockData,
-    audios: mockData,
+    movies: null,
+    comics: null,
+    audios: null,
   });
 
   const { movies, comics, audios } = allTopMedias;
 
   const topMedias = tab === 0 ? movies : tab === 1 ? comics : audios;
 
-  const getData = async () => {};
+  const getData = async () => {
+    setIsLoading(true);
+
+    try {
+      const res = await getTopMedias();
+      setAllTopMedias(res.data);
+    } catch (err) {
+      enqueueSnackbar(err.message, { variant: 'error' });
+    }
+
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     getData();
@@ -65,9 +83,11 @@ const Home = () => {
             </Typography>
           ))}
         </Box>
-        <Box>
-          <TopMedias medias={topMedias} />
-        </Box>
+        {topMedias && (
+          <Box>
+            <TopMedias medias={topMedias} />
+          </Box>
+        )}
       </Box>
     </Layout>
   );

@@ -3,8 +3,7 @@ import { Box, Typography, alpha } from '@mui/material';
 import RatingStars from './RatingStars';
 
 const TopMediaItem = ({ media }) => {
-  const { name, images, viewed, rating } = media;
-  console.log({ media });
+  const { name, episode, images, viewed, rating } = media;
 
   return (
     <Box position="relative" display="flex">
@@ -42,7 +41,7 @@ const TopMediaItem = ({ media }) => {
           align="center"
           sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
         >
-          {name}
+          {name} - Ep {episode}
         </Typography>
         <Typography color="white" align="center">
           {viewed} views

@@ -44,7 +44,7 @@ const TopMedias = ({ medias }) => {
             textTransform="uppercase"
             lineHeight="40px"
           >
-            {best.name}
+            {best.name} - Ep {best.episode}
           </Typography>
           <Typography color="white" fontWeight={600}>
             {best.viewed} views

@@ -179,7 +179,7 @@ const MediaList = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4}>
+                  <TableCell colSpan={7}>
                     <Typography align="center">No medias.</Typography>
                   </TableCell>
                 </TableRow>
