@@ -1,4 +1,4 @@
-const service = require('../services/user.service');
+const service = require("../services/user.service");
 
 const getUsers = async (req, res) => {
   try {
@@ -40,9 +40,9 @@ const updateUser = async (req, res) => {
 
     await service.updateUser(userId, { username, role });
 
-    res.status(200).send('Updated successfully');
+    res.status(200).send("Updated successfully");
   } catch (err) {
-    err.message === 'User not found'
+    err.message === "User not found"
       ? res.status(404).send(err.message)
       : res.status(400).send(err.message);
   }
@@ -54,17 +54,17 @@ const deleteUser = async (req, res) => {
 
     await service.deleteUser(userId);
 
-    res.status(200).send('Deleted successfully');
+    res.status(200).send("Deleted successfully");
   } catch (err) {
     res.status(404).send(err.message);
   }
 };
 
 const getUserHistory = async (req, res) => {
-  const { _id } = req.user;
+  const { userId } = req;
 
   try {
-    const history = await service.getUserHistory(_id.toString());
+    const history = await service.getUserHistory(userId);
 
     res.status(200).send(history);
   } catch (err) {
