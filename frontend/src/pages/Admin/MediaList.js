@@ -51,6 +51,7 @@ const MediaList = () => {
     try {
       await remove(id);
       await getData();
+      enqueueSnackbar('Removed media successfully', { variant: 'success' });
     } catch (err) {
       enqueueSnackbar(err.message, { variant: 'error' });
     }
@@ -98,6 +99,14 @@ const MediaList = () => {
       <Box display="flex" flexDirection="column" gap={2} p={2}>
         <Navs />
         <Typography variant="h5">Media list</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ alignSelf: 'flex-start' }}
+          onClick={() => navigate('/admin/medias/create')}
+        >
+          Create media
+        </Button>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>

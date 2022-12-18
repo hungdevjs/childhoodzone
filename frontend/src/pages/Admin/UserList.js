@@ -49,6 +49,7 @@ const UserList = () => {
     try {
       await remove(id);
       await getData();
+      enqueueSnackbar('Removed user successfully', { variant: 'success' });
     } catch (err) {
       enqueueSnackbar(err.message, { variant: 'error' });
     }
@@ -96,6 +97,14 @@ const UserList = () => {
       <Box display="flex" flexDirection="column" gap={2} p={2}>
         <Navs />
         <Typography variant="h5">User list</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ alignSelf: 'flex-start' }}
+          onClick={() => navigate('/admin/users/create')}
+        >
+          Create user
+        </Button>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>

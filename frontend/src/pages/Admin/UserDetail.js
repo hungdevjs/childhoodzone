@@ -17,7 +17,7 @@ import { useSnackbar } from 'notistack';
 import Layout from '../../components/Layout';
 import Navs from './components/Navs';
 import useAppContext from '../../hooks/useAppContext';
-import { getById, update } from '../../services/user.service';
+import { getById, update, create } from '../../services/user.service';
 
 const userRoles = ['Admin', 'User', 'PremiumUser'];
 
@@ -28,7 +28,12 @@ const UserDetail = () => {
   const {
     loadingState: { setIsLoading },
   } = useAppContext();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    username: '',
+    role: 'User',
+  });
+
+  const isUpdating = !!id;
 
   const updateUserField = (field, value) =>
     setUser({
@@ -36,14 +41,17 @@ const UserDetail = () => {
       [field]: value,
     });
 
-  const updateUser = async () => {
+  const submit = async () => {
     setIsLoading(true);
 
     try {
       const { _id, ...data } = user || {};
-      await update(_id, data);
+      isUpdating ? await update(_id, data) : await create(user);
       navigate('/admin/users');
-      enqueueSnackbar('Updated user successfully', { variant: 'success' });
+      enqueueSnackbar(
+        `${isUpdating ? 'Updated' : 'Created'} user successfully`,
+        { variant: 'success' }
+      );
     } catch (err) {
       enqueueSnackbar(err.message, { variant: 'error' });
     }
@@ -52,6 +60,7 @@ const UserDetail = () => {
   };
 
   const getData = async () => {
+    if (!isUpdating) return;
     setIsLoading(true);
 
     try {
@@ -68,7 +77,7 @@ const UserDetail = () => {
     getData();
   }, [id]);
 
-  const { _id, username, role } = user || {};
+  const { _id, username, password, role } = user || {};
 
   return (
     <Layout>
@@ -98,6 +107,19 @@ const UserDetail = () => {
                     updateUserField('username', e.target.value.trim())
                   }
                 />
+                {!isUpdating && (
+                  <TextField
+                    fullWidth
+                    type="password"
+                    variant="outlined"
+                    label="Password"
+                    placeholder="Password"
+                    value={password || ''}
+                    onChange={(e) =>
+                      updateUserField('password', e.target.value.trim())
+                    }
+                  />
+                )}
                 <FormControl fullWidth>
                   <InputLabel id="user-role">Role</InputLabel>
                   <Select
@@ -127,10 +149,10 @@ const UserDetail = () => {
               size="small"
               variant="contained"
               color="primary"
-              onClick={updateUser}
+              onClick={submit}
             >
               <Typography fontSize={12} fontWeight={600}>
-                Update
+                {isUpdating ? 'Update' : 'Create'}
               </Typography>
             </Button>
             <Button

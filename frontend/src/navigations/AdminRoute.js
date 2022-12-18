@@ -9,8 +9,10 @@ const AdminRoute = () => {
   return (
     <Routes>
       <Route path="/medias/" element={<MediaList />} />
+      <Route path="/medias/create" element={<MediaDetail />} />
       <Route path="/medias/:id" element={<MediaDetail />} />
       <Route path="/users/" element={<UserList />} />
+      <Route path="/users/create" element={<UserDetail />} />
       <Route path="/users/:id" element={<UserDetail />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
